@@ -43,11 +43,11 @@ namespace HRMS_Web_Application.Models
         [DisplayName("Department")]
         public int? DepartmentId { get; set; }
         [ForeignKey("DepartmentId")]
-        public Department? Department { get; set; }
+        public string departmentName { get; set; }
         [DisplayName("Position")]
         public int? PositionId { get; set; }
         [ForeignKey("PositionId")]
-        public Position? Position { get; set; }
+        public string positionName { get; set; }
 
         public string? EmployeeType { get; set; }
 

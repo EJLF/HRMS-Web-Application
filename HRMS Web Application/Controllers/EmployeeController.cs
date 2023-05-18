@@ -85,26 +85,6 @@ namespace HRMS_Web_Application.Controllers
                     await SetupViewBag();
 
                     var stringContent = new StringContent(JsonConvert.SerializeObject(registerEmployee), Encoding.UTF8, "application/json");
-                    //?FirstName=ff
-                    //&MiddleName=ff
-                    //&LastName=ff
-                    //&Gender=Male
-                    //&DateOfBirth=04%2F19%2F2323%2010%3A30%3A00
-                    //&Phone=09121213341
-                    //&Email=r%40r.com
-                    //&DepartmenttId=1
-                    //&PosistionId=1
-                    //&EmployeeType=ff
-                    //&Street=ff
-                    //&Barangay=ff
-                    //&City=ff
-                    //&State=ff
-                    //&PostalCode=1234
-                    //&DateHired=04%2F19%2F2323%2010%3A30%3A00
-                    //&activeStatus=true
-                    //&deleteStatus=false
-                    //&Password=123123123
-                    //http://localhost:5237/api/ApplicationUser?FirstName=EarlJoseph&MiddleName=Litong&LastName=Ferran&Gender=Male&DateOfBirth=5/15/2023 12:00:00 AM&Phone=09123812739&Email=earljosephferran121999@gmail.com&DepartmenttId=1&PosistionId=1&EmployeeType=Regular&Street=1234&Barangay=San Mariano&City=Roxas&State=Oriental Mindoro&PostalCode=1234&DateHired=5/22/2023 12:00:00 AM&activeStatus=true&deleteStatus=false&Password=123123123
                     var url = string.Format(baseUrl + "?FirstName=" + registerEmployee.FirstName +
                                                       "&MiddleName=" + registerEmployee.MiddleName +
                                                       "&LastName=" + registerEmployee.LastName +
@@ -152,7 +132,6 @@ namespace HRMS_Web_Application.Controllers
         {
             try
             {
-                //http://localhost:5237/api/ApplicationUser/1d779ffa-42d2-4ccb-a6a7-1599ae0325ed
                 await SetupViewBag();
                 //SetupHttpRequestHeaders();
                 var response = client.GetAsync(baseUrl + "/" + accountId).Result;
@@ -188,7 +167,8 @@ namespace HRMS_Web_Application.Controllers
                                                       "&Gender=" + editEmployee.Gender +
                                                       "&DateOfBirth=04%2F12%2F3043" +
                                                       "&Phone=" + editEmployee.Phone +
-                                                      "&Email=d%40d.com" + editEmployee.Email +
+                                                      "&DepartmentId=" + editEmployee.DepartmentId +
+                                                      "&PositionId=" + editEmployee.PositionId +
                                                       "&EmployeeType=try" +
                                                       "&Street=" + editEmployee.Street +
                                                       "&Barangay=" + editEmployee.Barangay +
