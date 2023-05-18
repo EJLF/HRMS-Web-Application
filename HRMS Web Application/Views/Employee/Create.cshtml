@@ -1,0 +1,131 @@
+﻿@model RegisterEmployeeViewModel
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+  <main id="main" class="main">
+    <section class="section">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Register Form</h5>
+
+              <!-- Multi Columns Form -->
+              
+              <form asp-controller="Employee" asp-action="Create" method="post" class="row g-3">
+                  <div asp-validation-summary="All" class="text-danger" >
+                  </div>
+                <div class="col-md-4">
+                  <label for="inputEmail5" class="form-label">First Name</label>
+                  <input asp-for="FirstName" class="form-control" />
+                  <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                  <label for="inputPassword5" class="form-label">Middle Name</label>
+                   <input asp-for="MiddleName" class="form-control" />
+                   <span asp-validation-for="MiddleName" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                  <label for="inputPassword5" class="form-label">Last Name</label>
+                  <input asp-for="LastName" class="form-control" />
+                  <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="col-md-2">
+                  <label for="inputPassword5" class="form-label">Gender</label>
+                  <select  asp-for="Gender" name="Gender" class="form-select">
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Others">Others</option>
+                    </select>
+                    <span asp-validation-for="Gender" class="text-danger"></span>
+                </div>
+                <div class="col-md-5">
+                  <label for="inputName5" class="form-label">Phone</label>
+                  <input asp-for="Phone" class="form-control" />
+                  <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+                <div class="col-md-5">
+                  <label for="inputName5" class="form-label">Date Of Birth</label>
+                  <input asp-for="DateOfBirth" class="form-control" />
+                  <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label for="DepartmentId" class="form-label">Department</label>
+                    <select asp-for="DepartmentId" class="form-select" asp-items="ViewBag.DepartmentList" id="departmentId" onchange="FillPosition(this, 'positionId');"></select>
+                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label for="PositionId" class="form-label">Position</label>
+                    <select asp-for="PositionId" class="form-select" asp-items="ViewBag.PositionList" id="positionId"></select>
+                    <span asp-validation-for="PositionId" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                  <label for="inputName5" class="form-label">Employment Type</label>
+                    <select  asp-for="EmployeeType" name="EmployeeType" class="form-select" >
+                        <option value="">Select Employment Type</option>
+                        <option value="Regular">Regular</option>
+                        <option value="Partime">Partime</option>
+                        <option value="Job Order">Job Order</option>
+                        <option value="Contract Of Service">Contract Of Service</option>
+                    </select>
+                    <span asp-validation-for="EmployeeType" class="text-danger"></span>
+                </div>
+               
+                <div class="col-md-3">
+                  <label for="inputName5" class="form-label">House No. / Street</label>
+                  <input asp-for="Street" class="form-control" />
+                  <span asp-validation-for="Street" class="text-danger"></span>
+                </div>
+                <div class="col-md-5">
+                  <label for="inputName5" class="form-label">Barangay</label>
+                  <input asp-for="Barangay" class="form-control" />
+                  <span asp-validation-for="Barangay" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                  <label for="inputName5" class="form-label">Municipality / City</label>
+                  <input asp-for="City" class="form-control" />
+                  <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                  <label for="inputName5" class="form-label">State</label>
+                  <input asp-for="State" class="form-control" />
+                  <span asp-validation-for="State" class="text-danger"></span>
+                </div>
+                <div class="col-md-2">
+                  <label for="inputName5" class="form-label">Postal Code</label>
+                  <input asp-for="PostalCode" class="form-control" />
+                  <span asp-validation-for="PostalCode" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                  <label for="inputName5" class="form-label">Date Hired</label>
+                  <input asp-for="DateHired" class="form-control" />
+                  <span asp-validation-for="DateHired" class="text-danger"></span>
+                </div>
+                 <div class="col-md-4">
+                  <label for="inputName5" class="form-label">Email</label>
+                   <input asp-for="Email" class="form-control"/>
+                   <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                  <label for="inputName5" class="form-label">Password</label>
+                   <input asp-for="Password" class="form-control"/>
+                   <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                  <label for="inputName5" class="form-label">Confirm Password</label>
+                   <input asp-for="ConfirmPassword" class="form-control"/>
+                   <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <button type="reset" class="btn btn-secondary">Reset</button>
+                </div>
+              </form><!-- End Multi Columns Form -->
+
+            </div>
+          </div>
+    </section>
+</main>
