@@ -52,8 +52,8 @@ namespace HRMS_Web_Application.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ApplicationUserAlert"] = "Error, Please Try Again!" + ex.Message;
-                return View();
+                TTempData["HRMSAlert"] = "Error, Please Try Again!" + ex.Message;
+                return RedirectToAction("Unauthorized", "Home");
             }
         }
 

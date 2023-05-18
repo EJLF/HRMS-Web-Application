@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<main id="main" class="main">
+    <section class="section">
+        <div class="text-center">
+            <h1 class="display-4">401</h1>
+            <h1 class="display-5">UNAUTHORIZED</h1>
+            <h1 class="display-6">PLEASE LOGIN RIGHT ACCOUNT TO ACCESS THIS</h1>
+        </div>
+    </section>
+</main>
+ @if(TempData["HRMSAlert"] != null)
+    {
+    <script>
+        // Show the alert
+        Swal.fire({
+            title: "Alert",
+            text: '@TempData["HRMSAlert"]',
+            icon: "",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "OK",
+            position: "top",
+        });
+    </script>
+    }

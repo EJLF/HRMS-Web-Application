@@ -22,7 +22,8 @@ namespace HRMS_Web_Application.Controllers
             {
                 using (var httpClient = new HttpClient())
                 {
-                    httpClient.DefaultRequestHeaders.Add("ApiKey", "123qwe");  
+                    string apiKey = "123qwe";
+                    httpClient.DefaultRequestHeaders.Add("ApiKey", apiKey);  
                     StringContent stringContent = new StringContent(JsonConvert.SerializeObject(loginModel), Encoding.UTF8, "application/json");
                                                      
                     using (var response = await httpClient.PostAsync(baseUrl+"?UserName=" +loginModel.UserName+"&Password="+loginModel.Password, stringContent))
@@ -40,6 +41,7 @@ namespace HRMS_Web_Application.Controllers
                             return Redirect("~/Account/Login");
                         }
                         HttpContext.Session.SetString("JWToken", token);
+                        HttpContext.Session.SetString("ApiKey", apiKey);
                     }
                 }
                 return RedirectToAction("List", "Employee");
