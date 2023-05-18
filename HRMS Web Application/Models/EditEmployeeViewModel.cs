@@ -39,10 +39,10 @@ namespace HRMS_Web_Application.Models
         // Foreign Key
         [DisplayName("Department")]
         public int? DepartmentId { get; set; }
-        public string? departmentName { get; set; }
+        public string? DepartmentName { get; set; }
         [DisplayName("Position")]
         public int? PositionId { get; set; }
-        public string? positionName { get; set; }
+        public string? PositionName { get; set; }
         public string? EmployeeType { get; set; }
 
 
