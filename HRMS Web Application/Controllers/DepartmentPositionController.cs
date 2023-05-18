@@ -30,6 +30,13 @@ namespace HRMS_Web_Application.Controllers
                 Text = d.DeptName
             }).ToList();
 
+            var defItem = new SelectListItem()
+            {
+                Value = "",
+                Text = "Select Department"
+            };
+            departmentList.Insert(0, defItem);
+
             ViewBag.DepartmentNames = departmentList;
 
             string jsonStrPosition = await client.GetStringAsync("http://localhost:5237/api/Position");
@@ -39,6 +46,13 @@ namespace HRMS_Web_Application.Controllers
                 Value = d.PosId.ToString(),
                 Text = d.positionName
             }).ToList();
+
+            var defItem1 = new SelectListItem()
+            {
+                Value = "",
+                Text = "Select Position"
+            };
+            positionList.Insert(0, defItem1);
 
             ViewBag.DepartmentList = departmentList;
             ViewBag.PositionList = positionList;
@@ -88,6 +102,11 @@ namespace HRMS_Web_Application.Controllers
             catch (Exception ex)
             {
                 TempData["HRMSAlert"] = "Error, Please Try Again!" + ex.Message;
+                if (ex.Message.Contains("500"))
+                {
+
+                    return RedirectToAction("Privacy", "Home");
+                }
                 return RedirectToAction("Unauthorized", "Home");
             }
         }

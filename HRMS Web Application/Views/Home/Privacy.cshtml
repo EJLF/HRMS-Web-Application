@@ -1,12 +1,33 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Home Page";
 }
 <main id="main" class="main">
     <section class="section">
         <div class="text-center">
-            <h1 class="display-4">Please Contact the Admin</h1>
-            <h1 class="display-4">To</h1>
-            <h1 class="display-5">Activate your Acoount</h1>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <h1 class="display-4">500</h1>
+            <h1 class="display-5">INTERNAL ERRORS</h1>
+            <h1 class="display-6">PLEASE LOGIN RIGHT ACCOUNT TO ACCESS THIS</h1>
         </div>
     </section>
 </main>
+ @if(TempData["HRMSAlert"] != null)
+    {
+    <script>
+        // Show the alert
+        Swal.fire({
+            title: "Alert",
+            text: '@TempData["HRMSAlert"]',
+            icon: "",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "OK",
+            position: "top",
+        });
+    </script>
+    }

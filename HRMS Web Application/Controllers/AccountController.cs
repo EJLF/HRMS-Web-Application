@@ -53,5 +53,14 @@ namespace HRMS_Web_Application.Controllers
                 return Redirect("~/Account/Login");
             }
         }
+
+        public async Task<IActionResult> Logout()
+        {
+            HttpContext.Session.Remove("JWToken");
+            HttpContext.Session.Remove("ApiKey");
+            HttpContext.Session.Remove("UserName");
+
+            return RedirectToAction("Login", "Account");
+        }
     }
 }

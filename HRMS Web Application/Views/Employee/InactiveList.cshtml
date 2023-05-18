@@ -1,0 +1,207 @@
+﻿@model IEnumerable<HRMS_Web_Application.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "List";
+}
+ <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>List of Inactive Accounts</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a>Home</a></li>
+          <li class="breadcrumb-item">Employee</li>
+          <li class="breadcrumb-item active">List</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+
+          <div class="card">
+            <div class="card-body">
+            </br>
+            <p class="d-flex justify-content-between">
+                <a class="btn btn-success ms-auto" role="button" asp-controller="Employee" asp-action="List"><i class="bi bi-check-circle"></i> Show Active</a>
+            </p>
+
+            <form action="List">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="input-group md-form align-content-sm-around form-2 pl-0">
+                            <select id="department-filter" name="searchOption" class="form-select" asp-items="ViewBag.DepartmentNames"></select>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-group md-form align-content-sm-around form-2 pl-0">
+                            <input id="search-box" type="text" class="form-control" placeholder="Search...">
+                            <div class="input-group-append">
+                                <button id="search-button" class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+              <!-- Table with stripped rows -->
+              <table id="employee-table" class="table datatable">
+                <thead>
+                  <tr>
+                    <th scope="col">No.</th>
+                    <th scope="col">Full Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Position</th>
+                    <th scope="col"></th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                 @{int i=0;}
+                 @foreach (var item in Model) {
+                            <tr>
+                                <td>
+                                    @(++i)
+                                </td>
+
+                                <td>
+                                    @item.FullName
+                                </td>
+                                <td>
+                                    @item.Email
+                                </td>
+       
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.departmentName)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.positionName)
+                                </td>
+
+                                 <td>   
+                                    <a class="btn btn-primary" role="button" title="View Details" asp-action="Details" asp-route-accountId="@item.Id"><i class="bi bi-folder"></i></a> 
+                                   
+                                     <!--Activate Message Box -->
+                                    <button type="button" class="btn btn-danger" title="Activate Account" data-bs-toggle="modal" data-bs-target="#activateModal-@item.Id" asp-route-accountId="@item.Id">
+                                    <i class="bi bi-exclamation-octagon"></i>
+                                    </button>
+                                    <div class="modal fade" id="activateModal-@item.Id" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                           <h5 class="modal-title" style="font-weight:bold;">Warning</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to Activate this Account?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <a class="btn btn-success" role="button"asp-action="DeleteFormInActive" asp-route-accountId="@item.Id">Activate</a>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                  
+                                    <!--Delete Message Box -->
+                                    <button type="button" class="btn btn-danger" title="Delete Account" data-bs-toggle="modal" data-bs-target="#deleteModal-@item.Id" asp-route-accountId="@item.Id">
+                                    <i class="bi bi-trash"></i>
+                                    </button>
+                                    <div class="modal fade" id="deleteModal-@item.Id" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" style="font-weight:bold;">Warning</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to Delete @item.FullName from record?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <a class="btn btn-danger" role="button"asp-action="Delete" asp-route-accountId="@item.Id">Delete</a>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                 </td>
+                            </tr>
+                    }
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+
+<script>
+    const departmentFilter = document.getElementById('department-filter');
+    const employeeTable = document.getElementById('employee-table');
+    const searchBox = document.getElementById('search-box');
+
+    departmentFilter.addEventListener('change', () => {
+      const selectedDepartmentId = parseInt(departmentFilter.value);
+      const searchValue = searchBox.value.toLowerCase().trim();
+      const rows = employeeTable.querySelectorAll('tbody tr');
+
+      rows.forEach((row) => {
+        const departmentId = parseInt(row.querySelector('[data-department-id]').getAttribute('data-department-id'));
+        const fullName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+        const email = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+        const position = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
+
+        if ((isNaN(selectedDepartmentId) || selectedDepartmentId === 0 || departmentId === selectedDepartmentId) &&
+            (searchValue === '' ||
+             fullName.includes(searchValue) ||
+             email.includes(searchValue) ||
+             position.includes(searchValue))) {
+          row.style.display = 'table-row';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+
+    searchBox.addEventListener('input', () => {
+      const selectedDepartmentId = parseInt(departmentFilter.value);
+      const searchValue = searchBox.value.toLowerCase().trim();
+      const rows = employeeTable.querySelectorAll('tbody tr');
+
+      rows.forEach((row) => {
+        const departmentId = parseInt(row.querySelector('[data-department-id]').getAttribute('data-department-id'));
+        const fullName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+        const email = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+        const position = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
+
+        if ((isNaN(selectedDepartmentId) || selectedDepartmentId === 0 || departmentId === selectedDepartmentId) &&
+            (searchValue === '' ||
+             fullName.includes(searchValue) ||
+             email.includes(searchValue) ||
+             position.includes(searchValue))) {
+          row.style.display = 'table-row';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+

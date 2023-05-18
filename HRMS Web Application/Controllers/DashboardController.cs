@@ -32,17 +32,23 @@ namespace HRMS_Web_Application.Controllers
                 string employeePerformance = await client.GetStringAsync("http://localhost:5237/api/Department");
                 //List<EmployeePerformance> employeePerformances = JsonConvert.DeserializeObject<List<employeePerformance>>(employeePerformance);
 
-                // var employees = _userManager.Users.Where(status => status.ActiveStatus == false).Where(d => d.DeleteStatus == false).ToList();
+                
                 ViewBag.Employees = employees.Count() - 1;
                 ViewBag.Departments = departments.Count;
                 ViewBag.Positions = positions.Count();
-                ViewBag.EmployeeInActive = "";//employees;
+                ViewBag.EmployeeInActive = employees.Where(a => a.ActiveStatus == false);//employees;
                 ViewBag.EmployeePerformance = ""; //_employeePerformance.ListOfEmployeePerformance(null).Where(e => e.Status == true);
                 return View();
             }
             catch (Exception ex)
             {
-                TempData["HRMSAlert"] = "Error, Please Try Again!" + ex.Message;
+                TempData["HRMSAlert"] = "Error, Please Try Again! " + ex.Message;
+                if (ex.Message.Contains("500"))
+                {
+                    
+                    return RedirectToAction("Privacy", "Home");
+                }
+                
                 return RedirectToAction("Unauthorized", "Home");
             }
         }

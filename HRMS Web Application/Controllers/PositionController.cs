@@ -56,6 +56,11 @@ namespace HRMS_Web_Application.Controllers
             catch (Exception ex)
             {
                 TempData["HRMSAlert"] = "Error, Please Try Again!" + ex.Message;
+                if (ex.Message.Contains("500"))
+                {
+
+                    return RedirectToAction("Privacy", "Home");
+                }
                 return RedirectToAction("Unauthorized", "Home");
             }
         }

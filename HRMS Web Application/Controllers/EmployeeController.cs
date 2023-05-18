@@ -30,6 +30,13 @@ namespace HRMS_Web_Application.Controllers
                 Text = d.DeptName
             }).ToList();
 
+            var defItem = new SelectListItem()
+            {
+                Value = "",
+                Text = "Select Department"
+            };
+            departmentList.Insert(0, defItem);
+
             ViewBag.DepartmentNames = departmentList;
 
             string jsonStrPosition = await client.GetStringAsync("http://localhost:5237/api/Position");
@@ -40,6 +47,13 @@ namespace HRMS_Web_Application.Controllers
                 Text = d.positionName
             }).ToList();
 
+            var defItem1 = new SelectListItem()
+            {
+                Value = "",
+                Text = "Select Position"
+            };
+            positionList.Insert(0, defItem1);
+
             ViewBag.DepartmentList = departmentList;
             ViewBag.PositionList = positionList;
         }
@@ -49,11 +63,36 @@ namespace HRMS_Web_Application.Controllers
             try
             {
                 var result = await GetApplicationUser();
-                return View(result);
+                var activeAccounts = result.Where(d=> d.ActiveStatus == true).ToList();
+                return View(activeAccounts);
             }
             catch (Exception ex)
             {
                 TempData["HRMSAlert"] = "Error, Please Try Again!" + ex.Message;
+                if (ex.Message.Contains("500"))
+                {
+
+                    return RedirectToAction("Privacy", "Home");
+                }
+                return RedirectToAction("Unauthorized", "Home");
+            }
+        }
+        public async Task<IActionResult> InactiveList()
+        {
+            try
+            {
+                var result = await GetApplicationUser();
+                var activeAccounts = result.Where(d => d.ActiveStatus == false).ToList();
+                return View(activeAccounts);
+            }
+            catch (Exception ex)
+            {
+                TempData["HRMSAlert"] = "Error, Please Try Again!" + ex.Message;
+                if (ex.Message.Contains("500"))
+                {
+
+                    return RedirectToAction("Privacy", "Home");
+                }
                 return RedirectToAction("Unauthorized", "Home");
             }
         }
@@ -61,7 +100,7 @@ namespace HRMS_Web_Application.Controllers
         [HttpGet]
         public async Task<List<ApplicationUser>> GetApplicationUser()
         {
-            SetupHttpRequestHeaders();
+            SetupViewBag();
             string jsonStr = await client.GetStringAsync(baseUrl);
             var result = JsonConvert.DeserializeObject<List<ApplicationUser>>(jsonStr).ToList();
 
@@ -195,6 +234,58 @@ namespace HRMS_Web_Application.Controllers
                     await SetupViewBag();
                     return View();
                 }
+            }
+            catch (Exception ex)
+            {
+                TempData["ApplicationUserAlert"] = "Error, Please Try Again! " + ex.Message;
+                return View();
+            }
+        }
+
+        public IActionResult DeleteFromActive(string accountId)
+        {
+            try
+            {
+                SetupHttpRequestHeaders();
+                string data = JsonConvert.SerializeObject(accountId);
+                StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+                //?accountId=186c2123-3c75-430a-86ee-7dd52f5763fc&deleteStatus=true
+                var url = string.Format(baseUrl + "?accountId={0}&activeStatus=false", accountId);
+                var response = client.PutAsync(url, content).Result;
+                if(response.IsSuccessStatusCode)
+                {
+                    var responsecontent = response.Content.ReadAsStringAsync().Result;
+                    TempData["ApplicationUserAlert"] = responsecontent;
+                    return RedirectToAction("List");
+                }
+                TempData["ApplicationUserAlert"] = "Error, Please Try Again! " + response.StatusCode;
+                return RedirectToAction("List");
+            }
+            catch (Exception ex)
+            {
+                TempData["ApplicationUserAlert"] = "Error, Please Try Again! " + ex.Message;
+                return View();
+            }
+        }
+        
+        public IActionResult DeleteFormInActive(string accountId)
+        {
+            try
+            {
+                SetupHttpRequestHeaders();
+                string data = JsonConvert.SerializeObject(accountId);
+                StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+                //?accountId=186c2123-3c75-430a-86ee-7dd52f5763fc&deleteStatus=true
+                var url = string.Format(baseUrl + "?accountId={0}&activeStatus=true", accountId);
+                var response = client.PutAsync(url, content).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var responsecontent = response.Content.ReadAsStringAsync().Result;
+                    TempData["ApplicationUserAlert"] = responsecontent;
+                    return RedirectToAction("List");
+                }
+                TempData["ApplicationUserAlert"] = "Error, Please Try Again! " + response.StatusCode;
+                return RedirectToAction("List");
             }
             catch (Exception ex)
             {
