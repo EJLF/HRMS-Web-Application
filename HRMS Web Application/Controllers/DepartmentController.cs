@@ -13,7 +13,8 @@ namespace HRMS_Web_Application.Controllers
         public void SetupHttpRequestHeaders()
         {
             string accessToken = HttpContext.Session.GetString("JWToken");
-            client.DefaultRequestHeaders.Add("ApiKey", "123qwe");
+            string apiKey = HttpContext.Session.GetString("ApiKey");
+            client.DefaultRequestHeaders.Add("ApiKey", apiKey);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         }
 

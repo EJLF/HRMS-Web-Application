@@ -14,7 +14,8 @@ namespace HRMS_Web_Application.Controllers
         public void SetupHttpRequestHeaders()
         {
             string accessToken = HttpContext.Session.GetString("JWToken");
-            client.DefaultRequestHeaders.Add("ApiKey", "123qwe");
+            string apiKey = HttpContext.Session.GetString("ApiKey");
+            client.DefaultRequestHeaders.Add("ApiKey", apiKey);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         }
 
@@ -86,8 +87,8 @@ namespace HRMS_Web_Application.Controllers
             }
             catch (Exception ex)
             {
-                TempData["DepartmentPositionAlert"] = "Error, Please Try Again!" + ex.Message;
-                return View();
+                TempData["HRMSAlert"] = "Error, Please Try Again!" + ex.Message;
+                return RedirectToAction("Unauthorized", "Home");
             }
         }
 
