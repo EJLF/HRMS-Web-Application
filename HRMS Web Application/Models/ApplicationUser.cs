@@ -51,19 +51,7 @@ namespace HRMS_Web_Application.Models
 
         public string? EmployeeType { get; set; }
 
-       /* //Benefits
-        [RegularExpression("[0-9]{13}", ErrorMessage = "This is not a valid SSS Number")]
-        [Display(Name = "SSS Number")]
-        public string? SSSNumber { get; set; }
-
-        [RegularExpression("[0-9]{12}", ErrorMessage = "This is not a valid PagIbig Number")]
-        [Display(Name = "PagIbig Number")]
-        public string? PagIbigId { get; set; }
-        [RegularExpression("[0-9]{12}", ErrorMessage = "This is not a valid PhilHealth Number")]
-        [Display(Name = "Philhealth Number")]
-        public string? PhilHealthId { get; set; }*/
-
-        //Addrress
+        //Address
         [Required]
         public string Street { get; set; }
         [Required]
