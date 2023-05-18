@@ -44,8 +44,7 @@ namespace HRMS_Web_Application.Controllers
                         HttpContext.Session.SetString("ApiKey", apiKey);
                     }
                 }
-                return RedirectToAction("List", "Employee");
-                // return Redirect("~/Department/Index");
+                return RedirectToAction("Index", "Dashboard");
             }
             catch (Exception ex)
             {

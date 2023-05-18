@@ -1,0 +1,141 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<main id="main" class="main">
+    <section class="section">
+        <div class="row">
+        <div class="col-lg-8">
+          <div class="row">
+
+            <!-- Employee Card -->
+            <div class="col-xxl-4 col-xl-12">
+              <div class="card info-card customers-card">
+                <div class="card-body">
+                  <h5 class="card-title"><a asp-controller="Employee" asp-action="List">Employees</a> <span>| Total</span></h5>
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-people-fill"></i>
+                      <h1 class="ms-3 mb-0">@ViewBag.Employees</h1>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- End Employee Card -->
+
+            <!-- Department Card -->
+            <div class="col-xxl-4 col-xl-12">
+              <div class="card info-card customers-card">
+                <div class="card-body">
+                  <h5 class="card-title"><a asp-controller="Department" asp-action="List">Departments</a> <span>| Total</span></h5>
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-buildings-fill"></i>
+                      <h1 class="ms-3 mb-0">@ViewBag.Departments</h1>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- End Department Card -->
+
+            <!-- Postition Card -->
+            <div class="col-xxl-4 col-xl-12">
+              <div class="card info-card customers-card">
+                <div class="card-body">
+                  <h5 class="card-title"><a asp-controller="Position" asp-action="List">Positions</a> <span>| Total</span></h5>
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-briefcase-fill style="font-size: 24px;""></i>
+                      <h1 class="ms-3 mb-0">@ViewBag.Positions</h1>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- End Position Card -->
+
+           
+            <!-- Iactive Accounts -->
+            <div class="col-12">
+              <div class="card recent-sales overflow-auto">
+
+                <div class="card-body">
+                  <h5 class="card-title"><a asp-controller="Employee" asp-action="InactiveList">List Of Inactive Accounts</a> <span>| Total</span></h5>
+
+                  <table class="table table-borderless datatable">
+                    <thead>
+                      <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Date Hired</th>
+                        <th scope="col">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    @{int i=0;}
+                    @foreach(var employee in ViewBag.EmployeeInActive)
+                    {
+                       <tr>
+                        <td>@(++i)</td>
+                        <td>@employee.FullName</td>
+                        <td>@employee.Phone</td>
+                        <td>@employee.DateHired.ToString("MM-dd-yyyy")</td>
+                        <td><span class="badge bg-danger">Inactive</span></td>
+                      </tr>                     
+                    }
+                    </tbody>
+                  </table>
+
+                </div>
+
+              </div>
+            </div><!-- End Iactive Accounts -->
+
+           
+          </div>
+        </div><!-- End Left side columns -->
+
+
+
+       <!-- Right side columns -->
+        <div class="col-lg-4">
+
+          <div class="card">
+              
+            <div class="card-body">
+              <h5 class="card-title"><a asp-controller="EmployeePerformance" asp-action="List">Review History</a> <span>| Logs</span></h5>
+
+              <table class="table table-borderless datatable">
+                    <thead>
+                      <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Subject / Topic</th>
+                        <th scope="col">Date</th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                @{int j=0;}
+                @foreach(var performance in ViewBag.EmployeePerformance)
+                {
+                      <tr>
+                        <td>@(++j)</td>
+                        <td>@performance.About</td>
+                        <td>@performance.DateReview</td>
+                      </tr>
+                }
+                    </tbody>
+                  </table>
+
+            </div>
+          </div>
+        </div><!-- End Right side columns -->
+
+        </div>
+    </section>
+</main>
+
