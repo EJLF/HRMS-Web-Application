@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string userName = Context.Request.HttpContext.Session.GetString("UserName");
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -57,13 +60,29 @@
     <nav class="header-nav ms-auto">
          <ul class="d-flex align-items-center">
 
+       @if (userName != null)
+        {
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">@userName</a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li>
+                        <a class="dropdown-item" asp-area="" asp-controller="Profile" asp-action="Details">Profile</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ChangePassword">Change Password</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                    </li>
+                </ul>
+            </li>
+        }
+        else if(userName  == null)
+        {
             <li class="nav-item">
                 <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
             </li>
-        
+        }
+            
           </ul><!-- End Profile Dropdown Items -->
         </li><!-- End Profile Nav -->
 

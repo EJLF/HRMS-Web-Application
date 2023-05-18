@@ -42,6 +42,7 @@ namespace HRMS_Web_Application.Controllers
                         }
                         HttpContext.Session.SetString("JWToken", token);
                         HttpContext.Session.SetString("ApiKey", apiKey);
+                        HttpContext.Session.SetString("UserName", loginModel.UserName);
                     }
                 }
                 return RedirectToAction("Index", "Dashboard");
