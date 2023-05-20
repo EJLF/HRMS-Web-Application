@@ -63,7 +63,7 @@ namespace HRMS_Web_Application.Controllers
             try
             {
                 var result = await GetApplicationUser();
-                var activeAccounts = result.Where(d=> d.ActiveStatus == true).ToList();
+                var activeAccounts = result.Where(d=> d.ActiveStatus == true).Where(a => a.DeleteStatus == false).ToList();
                 return View(activeAccounts);
             }
             catch (Exception ex)
@@ -82,7 +82,7 @@ namespace HRMS_Web_Application.Controllers
             try
             {
                 var result = await GetApplicationUser();
-                var activeAccounts = result.Where(d => d.ActiveStatus == false).ToList();
+                var activeAccounts = result.Where(d => d.ActiveStatus == false).Where(a => a.DeleteStatus == false).ToList();
                 return View(activeAccounts);
             }
             catch (Exception ex)
@@ -277,6 +277,32 @@ namespace HRMS_Web_Application.Controllers
                 StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
                 //?accountId=186c2123-3c75-430a-86ee-7dd52f5763fc&deleteStatus=true
                 var url = string.Format(baseUrl + "?accountId={0}&activeStatus=true", accountId);
+                var response = client.PutAsync(url, content).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var responsecontent = response.Content.ReadAsStringAsync().Result;
+                    TempData["ApplicationUserAlert"] = responsecontent;
+                    return RedirectToAction("List");
+                }
+                TempData["ApplicationUserAlert"] = "Error, Please Try Again! " + response.StatusCode;
+                return RedirectToAction("List");
+            }
+            catch (Exception ex)
+            {
+                TempData["ApplicationUserAlert"] = "Error, Please Try Again! " + ex.Message;
+                return View();
+            }
+        }
+
+        public IActionResult Delete(string accountId)
+        {
+            try
+            {
+                SetupHttpRequestHeaders();
+                string data = JsonConvert.SerializeObject(accountId);
+                StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+                //?accountId=186c2123-3c75-430a-86ee-7dd52f5763fc&deleteStatus=true
+                var url = string.Format(baseUrl + "/api/DeleteStatus?accountId={0}", accountId);
                 var response = client.PutAsync(url, content).Result;
                 if (response.IsSuccessStatusCode)
                 {

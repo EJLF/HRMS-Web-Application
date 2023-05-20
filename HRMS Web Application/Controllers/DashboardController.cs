@@ -33,10 +33,10 @@ namespace HRMS_Web_Application.Controllers
                 //List<EmployeePerformance> employeePerformances = JsonConvert.DeserializeObject<List<employeePerformance>>(employeePerformance);
 
                 
-                ViewBag.Employees = employees.Count() - 1;
+                ViewBag.Employees = employees.Where(a => a.DeleteStatus == false).Count()-1;
                 ViewBag.Departments = departments.Count;
                 ViewBag.Positions = positions.Count();
-                ViewBag.EmployeeInActive = employees.Where(a => a.ActiveStatus == false);//employees;
+                ViewBag.EmployeeInActive = employees.Where(a => a.ActiveStatus == false).Where(a => a.DeleteStatus == false);//employees;
                 ViewBag.EmployeePerformance = ""; //_employeePerformance.ListOfEmployeePerformance(null).Where(e => e.Status == true);
                 return View();
             }

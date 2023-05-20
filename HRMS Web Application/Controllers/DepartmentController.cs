@@ -120,20 +120,27 @@ namespace HRMS_Web_Application.Controllers
                 return View();
             }
         }
-        public IActionResult Delete(int DeptId)
+        public async Task<IActionResult> DeleteAsync(int DeptId)
         {
             try
             {
                 SetupHttpRequestHeaders();
                 var url = string.Format(baseUrl + "?id={0}", DeptId);
                 var response = client.DeleteAsync(url).Result;
+                string responseContent = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                 {
                     TempData["DepartmentAlert"] = "Delete Successfull!";
                     return RedirectToAction("List");
                 }
-                TempData["DepartmentAlert"] = "Error, Please Try Again!";
-                return BadRequest(response);
+                //The DELETE statement conflicted with the REFERENCE constraint
+                if(responseContent.Contains("The DELETE statement conflicted with the REFERENCE constraint"))
+                {
+                    TempData["DepartmentAlert"] = "It is not possible to delete this department while there is an Employee or designation assigned to it.";
+                    return RedirectToAction("List");
+                }
+                TempData["DepartmentAlert"] = "Error Please Try Agian! "+ response;
+                return RedirectToAction("List");
             }
             catch (Exception ex)
             {

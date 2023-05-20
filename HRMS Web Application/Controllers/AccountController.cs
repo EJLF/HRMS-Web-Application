@@ -28,6 +28,12 @@ namespace HRMS_Web_Application.Controllers
                                                      
                     using (var response = await httpClient.PostAsync(baseUrl+"?UserName=" +loginModel.UserName+"&Password="+loginModel.Password, stringContent))
                     {
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            TempData["AccountAlert"] = "Invalid credentials";
+                            ViewBag.Message = "Invalid credentials";
+                            return Redirect("~/Account/Login");
+                        }
                         string token = await response.Content.ReadAsStringAsync();
                         token = token.Replace("{\"token\":\"", "").Replace("\"}", "");
 
@@ -35,11 +41,6 @@ namespace HRMS_Web_Application.Controllers
                         var role = jwtToken.Claims.FirstOrDefault(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role");
                         var username = jwtToken.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name");
 
-                        if (!response.IsSuccessStatusCode)
-                        {
-                            ViewBag.Message = "Invalid credentials";
-                            return Redirect("~/Account/Login");
-                        }
                         HttpContext.Session.SetString("JWToken", token);
                         HttpContext.Session.SetString("ApiKey", apiKey);
                         HttpContext.Session.SetString("UserName", loginModel.UserName);

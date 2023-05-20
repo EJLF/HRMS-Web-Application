@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Single Page Application</title>
+</head>
+<body>
+    <center>Login Page</center>
+    <div align="center">
+        <form style="width: 500px;">
+            <div class="container">
+                <button type="button" onclick="btnLogin()">Login</button>
+            </div>
+        </form>
+    </div>
+    <!--List of todos-->
+    <div id="listalltodos">
+
+    </div>
+
+    <script>
+
+        function btnLogin() {
+            // rest api's and then start writing the functionality
+
+            // httpclient = js http client  -> ajax which can be used for http client 
+
+            var httpClient = new XMLHttpRequest();
+            httpClient.onreadystatechange = function () {
+                console.log(this.readyState);
+                console.log(this.responseText);
+                if (this.readyState == 4 && this.status == 200 ) {
+                   // document.getElementById("listalltodos").innerHTML = this.responseText;
+                    console.log(this.responseText);
+                }
+                else {
+                    console.log("No Response");
+                }     
+            }
+ 
+            httpClient.open("POST", "http://localhost:5237/api/Account?UserName=administrator%40pjli.com&Password=P%40ssw0rd", true);
+            
+            httpClient.setRequestHeader("ApiKey", "123qwe");
+            httpClient.setRequestHeader("Content-type", "application/json")
+            httpClient.send(''); // response
+
+            alert("Hello from login page");
+        }
+    </script>
+</body>
+</html>

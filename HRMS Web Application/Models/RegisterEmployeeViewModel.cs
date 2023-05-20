@@ -14,15 +14,15 @@ namespace HRMS_Web_Application.Models
         }
         [Required]
         [MinLength(2)]
-        [RegularExpression(@"^[a-zA-ZñÑ]+$", ErrorMessage = "This is not a valid Name. Special characters are not allowed.")]
+        [RegularExpression(@"^[a-zA-ZñÑ ]+$", ErrorMessage = "This is not a valid Name. Special characters are not allowed.")]
         [DisplayName("First Name")]
         public string FirstName { get; set; }
         [DisplayName("Middle Name")]
-        [RegularExpression(@"^[a-zA-ZñÑ]+$", ErrorMessage = "This is not a valid Name. Special characters are not allowed.")]
+        [RegularExpression(@"^[a-zA-ZñÑ ]+$", ErrorMessage = "This is not a valid Name. Special characters are not allowed.")]
         [Required]
         public string MiddleName { get; set; }
         [DisplayName("Last Name")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "This is not a valid Name. Special characters are not allowed.")]
+        [RegularExpression(@"^[a-zA-ZñÑ ]+$", ErrorMessage = "This is not a valid Name. Special characters are not allowed.")]
         [MinLength(2)]
         [Required]
         public string LastName { get; set; }
