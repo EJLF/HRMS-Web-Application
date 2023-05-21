@@ -1,0 +1,66 @@
+﻿@model HRMS_Web_Application.Models.EmployeePerformance
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<main id="main" class="main">
+     <section class="section profile">
+        <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Performance Review</h5>
+
+              <!-- Floating Labels Form -->
+              <form asp-controller="EmployeePerformance" asp-action="Create" method="post" class="row g-3">
+
+
+                 <div class="col-md-6">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingName" placeholder="Employee Name" asp-for="EmployeeName" readonly>
+                    <label for="floatingName">Employee Name</label>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingName" placeholder="Employee Name" asp-for="DateReview" value="@DateTime.Now.ToString("MM/dd/yyyy")" readonly>
+                    <label for="floatingName">Date Review</label>
+                  </div>
+                </div>
+
+                <div class="col-md-8">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingEmail" placeholder="About" asp-for="About" >
+                    <label for="floatingEmail">Subject / Topic</label>
+                  </div>
+                </div>
+                
+                <div class="col-12">
+                  <div class="form-floating">
+                    <textarea class="form-control" placeholder="Write a Review" id="floatingTextarea" style="height: 100px;" asp-for="PerformanceReview" maxlength="350"></textarea>
+                    <label for="floatingTextarea">Review</label>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingEmail" placeholder="Review by" asp-for="ReviewBy" readonly>
+                    <label for="floatingEmail">Review By:</label>
+                  </div>
+                </div>
+
+                  <div asp-validation-summary="All" class="text-danger">
+                       <input type="text" class="form-control" id="floatingName" placeholder="Employee Name" asp-for="Status" hidden>
+                       <input type="text" class="form-control" id="floatingName" placeholder="Employee Name" asp-for="UserID" hidden>
+                        <input type="text" class="form-control" id="floatingName" placeholder="Employee Name" asp-for="ReviewerID" hidden>
+                  </div>
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+              </form><!-- End floating Labels Form -->
+
+            </div>
+          </div>
+        </section>
+    </main

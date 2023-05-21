@@ -63,13 +63,13 @@ namespace HRMS_Web_Application.Controllers
             try
             {
                 var result = await GetApplicationUser();
-                var activeAccounts = result.Where(d=> d.ActiveStatus == true).Where(a => a.DeleteStatus == false).ToList();
+                var activeAccounts = result.Where(d=> d.ActiveStatus == true).Where(a => a.DeleteStatus == false).Where(u => u.UserName != "administrator@pjli.com").ToList();
                 return View(activeAccounts);
             }
             catch (Exception ex)
             {
-                TempData["HRMSAlert"] = "Error, Please Try Again!" + ex.Message;
-                if (ex.Message.Contains("500"))
+                TempData["HRMSAlert"] = "Error, Please Try Again! " + ex.Message;
+                if (ex.Message.Contains("500") || ex.Message.Contains("No connection"))
                 {
 
                     return RedirectToAction("Privacy", "Home");
@@ -87,8 +87,8 @@ namespace HRMS_Web_Application.Controllers
             }
             catch (Exception ex)
             {
-                TempData["HRMSAlert"] = "Error, Please Try Again!" + ex.Message;
-                if (ex.Message.Contains("500"))
+                TempData["HRMSAlert"] = "Error, Please Try Again! " + ex.Message;
+                if (ex.Message.Contains("500") || ex.Message.Contains("No connection"))
                 {
 
                     return RedirectToAction("Privacy", "Home");

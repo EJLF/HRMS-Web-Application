@@ -20,33 +20,37 @@ namespace HRMS_Web_Application.Controllers
         {
             try
             {
-                using (var httpClient = new HttpClient())
+                if (ModelState.IsValid)
                 {
-                    string apiKey = "123qwe";
-                    httpClient.DefaultRequestHeaders.Add("ApiKey", apiKey);  
-                    StringContent stringContent = new StringContent(JsonConvert.SerializeObject(loginModel), Encoding.UTF8, "application/json");
-                                                     
-                    using (var response = await httpClient.PostAsync(baseUrl+"?UserName=" +loginModel.UserName+"&Password="+loginModel.Password, stringContent))
+                    using (var httpClient = new HttpClient())
                     {
-                        if (!response.IsSuccessStatusCode)
+                        string apiKey = "123qwe";
+                        httpClient.DefaultRequestHeaders.Add("ApiKey", apiKey);
+                        StringContent stringContent = new StringContent(JsonConvert.SerializeObject(loginModel), Encoding.UTF8, "application/json");
+
+                        using (var response = await httpClient.PostAsync(baseUrl + "?UserName=" + loginModel.UserName + "&Password=" + loginModel.Password, stringContent))
                         {
-                            TempData["AccountAlert"] = "Invalid credentials";
-                            ViewBag.Message = "Invalid credentials";
-                            return Redirect("~/Account/Login");
+                            if (!response.IsSuccessStatusCode)
+                            {
+                                TempData["AccountAlert"] = "Invalid credentials";
+                                ViewBag.Message = "Invalid credentials";
+                                return Redirect("~/Account/Login");
+                            }
+                            string token = await response.Content.ReadAsStringAsync();
+                            token = token.Replace("{\"token\":\"", "").Replace("\"}", "");
+
+                            var jwtToken = new JwtSecurityToken(token);
+                            var role = jwtToken.Claims.FirstOrDefault(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role");
+                            var username = jwtToken.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name");
+
+                            HttpContext.Session.SetString("JWToken", token);
+                            HttpContext.Session.SetString("ApiKey", apiKey);
+                            HttpContext.Session.SetString("UserName", loginModel.UserName);
                         }
-                        string token = await response.Content.ReadAsStringAsync();
-                        token = token.Replace("{\"token\":\"", "").Replace("\"}", "");
-
-                        var jwtToken = new JwtSecurityToken(token);
-                        var role = jwtToken.Claims.FirstOrDefault(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role");
-                        var username = jwtToken.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name");
-
-                        HttpContext.Session.SetString("JWToken", token);
-                        HttpContext.Session.SetString("ApiKey", apiKey);
-                        HttpContext.Session.SetString("UserName", loginModel.UserName);
                     }
+                    return RedirectToAction("Index", "Dashboard");
                 }
-                return RedirectToAction("Index", "Dashboard");
+                return View();
             }
             catch (Exception ex)
             {

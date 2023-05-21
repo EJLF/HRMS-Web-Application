@@ -1,0 +1,141 @@
+﻿@model List<EmployeePerformance>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+ <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Performance Review</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a>Home</a></li>
+          <li class="breadcrumb-item">Reviews</li>
+          <li class="breadcrumb-item active">List</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+
+          <div class="card">
+            <div class="card-body">
+            </br>  
+            <form action="List">
+                <div class="input-group md-form align-content-sm-around form-2 pl-0">
+                    <input name="searchValue" class="form-control my-0 py-1 red-border" type="text" placeholder="Search" aria-label="Search" />
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary" id="basic-text1">
+                            <i class="fas fa-search text-black-grey" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+              <!-- Table with stripped rows -->
+              <table class="table datatable" id="employee-table">
+                <thead>
+                  <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Employe Name</th>
+                    <th scope="col">Subject / Topic</th>
+                    <th scope="col">Review By</th>
+                    <th scope="col">Date</th>
+                    <th></th>
+               
+                  </tr>
+                </thead>
+                <tbody>
+                 @{int i= 0;}
+                 @foreach (var item in Model) {
+                        <tr>
+                            <td>
+                                @(++i)
+                            </td>
+                             <td>
+                                @Html.DisplayFor(modelItem => item.EmployeeName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.About)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ReviewBy)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DateReview)
+                            </td>
+                 @if(!User.IsInRole("Employee"))
+                         {                             
+                            <td>
+                                <a class="btn btn-primary" role="button" asp-action="Update" asp-route-No="@item.No"><i class="bi bi-pencil-square"></i></a> 
+                                
+
+                                <button type="button" class="btn btn-danger" title="Delete Account" data-bs-toggle="modal" data-bs-target="#deleteModal-@item.No" asp-route-No="@item.No">
+                                <i class="bi bi-trash"></i>
+                                </button>
+                                <div class="modal fade" id="deleteModal-@item.No" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" style="font-weight:bold;">Warning</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to delete @item.EmployeeName Performance Review from record?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <a class="btn btn-danger" role="button" asp-action="Delete" asp-route-No="@item.No">Delete</a>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </td>
+                            if(item.Status==true){
+                                <td><span class="badge bg-success">New</span></td>
+                            }
+                            
+                         }
+                        </tr>
+                }
+                </tbody>
+              </table>
+              <!-- End Table with stripped rows -->
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+   @if(TempData["EmployeePerformanceAlert"] != null)
+    {
+    <script>
+        Swal.fire({
+            title: "Alert",
+            text: '@TempData["EmployeePerformanceAlert"]',
+            icon: "",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "OK",
+            position: "top",
+        });
+    </script>
+    }
+ <script>
+    $(function () {
+        console.log('Script is executing');
+        $("input[name=searchValue]").on('keyup', function (e) {
+            console.log('Keyup event fired');
+            $("form").submit();
+        });
+    });
+</script>
+
+
+
+
