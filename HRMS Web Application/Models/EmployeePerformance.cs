@@ -20,7 +20,7 @@ namespace HRMS_Web_Application.Models
         public string? UserID { get; set; }
         public string EmployeeName { get; set; }
         public string ReviewerID { get; set; }
-        public string ReviewBy { get; set; }
+        public string reviewerName { get; set; }
         [Required]
         [MinLength(3)]
         [DisplayName("About")]

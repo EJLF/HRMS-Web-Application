@@ -13,10 +13,8 @@
               <h5 class="card-title">Performance Review</h5>
 
               <!-- Floating Labels Form -->
-              <form asp-controller="EmployeePerformance" asp-action="Create" method="post" class="row g-3">
-
-
-                 <div class="col-md-6">
+              <form asp-controller="EmployeePerformance" asp-action="Update" method="post" class="row g-3">
+                <div class="col-md-6">
                   <div class="form-floating">
                     <input type="text" class="form-control" id="floatingName" placeholder="Employee Name" asp-for="EmployeeName" readonly>
                     <label for="floatingName">Employee Name</label>
@@ -39,7 +37,7 @@
                 
                 <div class="col-12">
                   <div class="form-floating">
-                    <textarea class="form-control" placeholder="Write a Review" id="floatingTextarea" style="height: 100px;" asp-for="PerformanceReview" maxlength="350"></textarea>
+                    <textarea class="form-control" placeholder="Write a Review" id="floatingTextarea" style="height: 100px;" asp-for="PerformanceReview" ></textarea>
                     <label for="floatingTextarea">Review</label>
                   </div>
                 </div>
@@ -53,13 +51,22 @@
                   <div asp-validation-summary="All" class="text-danger">
                        <input type="text" class="form-control" id="floatingName" placeholder="Employee Name" asp-for="Status" hidden>
                        <input type="text" class="form-control" id="floatingName" placeholder="Employee Name" asp-for="UserID" hidden>
-                        <input type="text" class="form-control" id="floatingName" placeholder="Employee Name" asp-for="ReviewerID" hidden>
+                       <input type="text" class="form-control" id="floatingName" placeholder="Employee Name" asp-for="ReviewerID" hidden>
+                       <input type="text" class="form-control" id="floatingName" placeholder="Employee Name" asp-for="No" hidden>
                   </div>
                 <div class="text-center">
                   <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
+                
               </form><!-- End floating Labels Form -->
-
+                @if (!User.IsInRole("Employee"))
+                {
+                    <a class="btn btn-secondary" asp-action="List"  asp-controller="EmployeePerformance">Back</a>
+                    
+                }
+                else{
+                    <a class="btn btn-secondary" asp-action="Unread" asp-route-No="@Model.No" asp-controller="EmployeePerformance">Back</a>
+                }
+                </div>
             </div>
           </div>
         </section>

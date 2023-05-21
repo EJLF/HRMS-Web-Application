@@ -33,7 +33,7 @@ namespace HRMS_Web_Application.Controllers
                 employeePerformance.About = null;
                 employeePerformance.PerformanceReview = null;
                 employeePerformance.EmployeeName = employeeName;
-                employeePerformance.ReviewBy = reviewer.FullName;
+                employeePerformance.reviewerName = reviewer.FullName;
                 employeePerformance.ReviewerID = reviewer.Id;
                 return View(employeePerformance);
             }
@@ -85,7 +85,7 @@ namespace HRMS_Web_Application.Controllers
             }
             catch (Exception ex)
             {
-                TempData["HRMSAlert"] = "Error, Please Try Again! " + ex.Message;
+                TempData["EmployeePerformanceAlert"] = "Error, Please Try Again! " + ex.Message;
                 if (ex.Message.Contains("500") || ex.Message.Contains("No connection"))
                 {
 
@@ -93,6 +93,85 @@ namespace HRMS_Web_Application.Controllers
                 }
                 return RedirectToAction("Unauthorized", "Home");
             } 
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(int No)
+        {
+            try
+            {
+                SetupHttpRequestHeaders();
+                var response = client.GetAsync(baseUrl + "/" + No).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var data = response.Content.ReadAsStringAsync().Result;
+                    EmployeePerformance departmentPosition = JsonConvert.DeserializeObject<EmployeePerformance>(data);
+                    return View(departmentPosition);
+                }
+                return View();
+            }
+            catch (Exception ex)
+            {
+                TempData["EmployeePerformanceAlert"] = "Error, Please Try Again!" + ex.Message;
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(EmployeePerformance newEmployeePerformance, int No)
+        {
+            try
+            {
+                SetupHttpRequestHeaders();
+                string data = JsonConvert.SerializeObject(newEmployeePerformance);
+                StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+                //?No=1&UserID=eb873458-a5cc-4247-81b9-3b2094dd0c56&ReviewBy=eb873458-a5cc-4247-81b9-3b2094dd0c56&About=try&PerformanceReview=try&DateReview=try&Status=false&DeleteStatus=false
+                var url = string.Format(baseUrl + "?No=" + newEmployeePerformance.No +
+                                                  "&UserID=" + newEmployeePerformance.UserID +
+                                                  "&ReviewBy=" + newEmployeePerformance.ReviewerID +
+                                                  "&About=" + newEmployeePerformance.About +
+                                                  "&PerformanceReview=" + newEmployeePerformance.PerformanceReview +
+                                                  "&DateReview=" + newEmployeePerformance.DateReview+
+                                                  "&Status=false" + 
+                                                  "&DeleteStatus=false");
+                var response = client.PutAsync(url, content).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var responsecontent = response.Content.ReadAsStringAsync().Result;
+                    DepartmentPosition dp = JsonConvert.DeserializeObject<DepartmentPosition>(responsecontent);
+                    TempData["EmployeePerformanceAlert"] = "Update Successfull!";
+                    return RedirectToAction("List");
+                }
+                TempData["EmployeePerformanceAlert"] = "Error, Please Try Again! " + response.StatusCode;
+                return RedirectToAction("List");
+            }
+            catch (Exception ex)
+            {
+                TempData["EmployeePerformanceAlert"] = "Error, Please Try Again! " + ex.Message;
+                return View();
+            }
+        }
+
+        public IActionResult Delete(int No)
+        {
+            try
+            {
+                SetupHttpRequestHeaders();
+                var url = string.Format(baseUrl + "?No={0}", No);
+                var response = client.DeleteAsync(url).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["EmployeePerformanceAlert"] = "Delete Successfull!";
+                    return RedirectToAction("List");
+                }
+                TempData["EmployeePerformanceAlert"] = "Error, Please Try Again! Status Code: " + response.StatusCode;
+                return RedirectToAction("List");
+            }
+            catch (Exception ex)
+            {
+                TempData["EmployeePerformanceAlert"] = "Error, Please Try Again!" + ex.Message;
+                return RedirectToAction("List");
+            }
         }
     }
 }
